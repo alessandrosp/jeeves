@@ -1,0 +1,61 @@
+instructions,commands
+show me the files,ls
+list me the files,ls
+show me the list of files,ls
+list me files and folders,ls
+show me files,ls
+i want to see the files in this folder,ls
+show me the files with details,ls -l
+list me the files with details,ls -l
+long list me the files,ls -l
+show me files and folders using a long listing format,ls -l
+list me the files and their permissions,ls -l
+show me the files and their size,ls -l
+show me the disk space,df
+give me the disk space,df
+list the various disks and their space,df
+list me the disk spaces,df
+how much space there is on the disk,df
+print the amount of free space on disk,df
+show me the disk space in megabytes,df -m
+get me the disk spaces in mb,df -m
+list me the disk spaces in megabytes,df -m
+how much space there is on disk in mb,df -m
+show me the disk space in a human readable format,df -m
+list me the amount of free space on disk in mg,df -m
+give me the name of this machine,hostname
+print name of machine, hostname
+what is the name of this machine,hostname
+return me the hostname, hostname
+print hostname,hostname
+give me the name of the host,hostname
+start a tmux session,tmux new -s session
+start tmux,tmux new -s session
+tmux,tmux new -s session
+new tmux session,tmux new -s session
+init a new tmux session,tmux new -s session
+start a brand new session,tmux new -s session
+kill tmux session,tmux kill-session -t session
+abort tmux session,tmux kill-session -t session
+kill tmux,tmux kill-session -t session
+kill the session on tmux,tmux kill-session -t session
+cancel tmux session,tmux kill-session -t session
+delete tmux session,tmux kill-session -t session
+list me tmux sessions,tmux ls
+give me all the tmux sessions,tmux ls
+print me sessions tmux,tmux ls
+give me a list of tmux sessions,tmux ls
+sessions on tmux,tmux ls
+ls tmux,tmux ls
+create a new folder,mkdir folder
+create folder,mkdir folder
+make new directory,mkdir folder
+create a new folder here,mkdir folder
+make directory,mkdir folder
+new folder,mkdir folder
+create file,touch file
+create a new file,touch file
+touch a file here,touch file
+create a file,touch file
+file creation,touch file
+new file,touch file
