@@ -1,6 +1,6 @@
 # This is the bash script that calls Jeeves's predict.py
 # For it to work, simply:
 # 1. Make it executable >>> chmod ugo+x jeeves
-# 2. Move it to /usr/bin >>> sudo cp jeeves /usr/bin/
+# 2. Move it to /usr/bin/ >>> sudo cp jeeves /usr/bin/
 # 3. Refresh your profile >>> . ~/.profile
 python3 ~/Code/jeeves/predict.py "$@"
