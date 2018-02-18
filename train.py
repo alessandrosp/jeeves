@@ -5,6 +5,10 @@ import utils
 def main():
     """Main function for the module."""
     dataset = utils.read_data()
+
+    expander = utils.DataExtender()
+    dataset = expander.generate_new_dataset(dataset)
+
     instructions, commands = utils.get_instructions_and_commands(dataset)
 
     encoder = utils.LabelEncoder(load_from_disk=False)

@@ -4,6 +4,10 @@ This module contains the general-purpose functions that
 are going to be used by train.py and predict.py.
 """
 
+import collections
+import string
+import random
+
 import pandas as pd
 import sklearn.ensemble
 import sklearn.feature_extraction.text
@@ -35,6 +39,107 @@ def get_instructions_and_commands(dataset):
     instructions = dataset[_INSTRUCTIONS_COLUMN_NAME]
     commands = dataset[_COMMANDS_COLUMN_NAME]
     return instructions, commands
+
+
+class DataExtender(object):
+    """Generate an extended dataset with additional instructions."""
+
+    def __init__(
+            self,
+            n_iterations=100,
+            prob_stay_the_same=0.5,
+            prob_swap_one_word=0.5,
+            prob_insert_a_typo=0.1):
+        self._n_iterations = n_iterations
+        self._prob_stay_the_same = prob_stay_the_same
+        self._prob_swap_one_word = prob_swap_one_word
+        self._prob_insert_a_typo = prob_insert_a_typo
+
+    def _learn_vocabulary(self, dataset):
+        """Learn the words associated with each command."""
+        vocabulary = collections.defaultdict(list)
+        for _, row in dataset.iterrows():
+            command = row['commands']
+            for token in row['instructions'].split(' '):
+                if token:
+                    vocabulary[command].append(token)
+        self.vocabulary_ = vocabulary
+
+    def _swap_one_word(self, row):
+        """Create a new instruction swapping words.
+
+        Specifically, it create a new instruction (str) by
+        replacing one word in the instruction contained
+        in row with another word from self.vocabulary_. Only
+        words associated with the same command are considered.
+
+        Args:
+            row: pd.Series(), where the indexes are the same
+                as the columns names of the original dataset.
+
+        Returns:
+            A string with the new instruction.
+        """
+        old_instruction = row['instructions']
+        tokens = [token
+                  for token in old_instruction.split(' ')
+                  if token]
+        new_word = random.choice(self.vocabulary_[row['commands']])
+        random_index = random.choice(range(0, len(tokens)))
+        tokens[random_index] = new_word
+
+        return ' '.join(tokens)
+
+    def _insert_a_typo(self, row):
+        """Create a new instruction inserting a typo in given one.
+
+        Args:
+            row: pd.Series(), where the indexes are the same
+                as the columns names of the original dataset.
+
+        Returns:
+            A string with the new instruction.
+        """
+        old_instruction = row['instructions']
+        letters = list(old_instruction)
+        random_letter = random.choice(string.ascii_lowercase)
+        random_index = random.choice(range(0, len(letters)))
+        letters[random_index] = random_letter
+
+        return ''.join(letters)
+
+    def generate_new_dataset(self, dataset, verbose=True):
+        """Generate a new, larger dataset."""
+        columns = dataset.columns
+        if verbose:
+            print('Rows in raw dataset: {rows}'.format(
+                rows=dataset.shape[0]))
+        self._learn_vocabulary(dataset)
+
+        new_rows = []
+        for _ in range(self._n_iterations):
+            for _, row in dataset.iterrows():
+                # Append the original row as it is
+                if self._prob_stay_the_same >= random.uniform(0, 1):
+                    new_rows.append(dict(row))
+                # Append a row with a single word being swapped
+                if self._prob_swap_one_word >= random.uniform(0, 1):
+                    new_row = {
+                        'instructions': self._swap_one_word(row),
+                        'commands': row['commands']}
+                    new_rows.append(new_row)
+                # Append a row with a single typo in it
+                if self._prob_insert_a_typo >= random.uniform(0, 1):
+                    new_row = {
+                        'instructions': self._insert_a_typo(row),
+                        'commands': row['commands']}
+                    new_rows.append(new_row)
+
+        if verbose:
+            print('Rows in extended dataset: {rows}'.format(
+                rows=len(new_rows)))
+        return pd.DataFrame(new_rows, columns=columns)
+
 
 
 class LabelEncoder(object):
@@ -141,9 +246,12 @@ class JeevesModel(object):
             model = cPickle.load(handle)
         return model
 
-    def train(self, signals, labels):
+    def train(self, signals, labels, verbose=True):
         """Fit the model on signals to predict labels."""
         self._model.fit(signals, labels)
+        if verbose:
+            best_score = self._model.best_score_
+            print('Best score in CV: {score}\n'.format(score=best_score))
 
     def save(self):
         """Save the model on disk."""
