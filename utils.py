@@ -10,9 +10,9 @@ import sklearn.feature_extraction.text
 
 import _pickle as cPickle
 
-_TRAINING_SET_FILEPATH = ''
-_INSTRUCTIONS_COLUMN_NAME = ''
-_COMMANDS_COLUMN_NAME = ''
+_TRAINING_SET_FILEPATH = 'data/raw_training_dataset.csv'
+_INSTRUCTIONS_COLUMN_NAME = 'instructions'
+_COMMANDS_COLUMN_NAME = 'commands'
 
 _ENCODER_FILEPATH = 'pickles/encoder.p'
 
