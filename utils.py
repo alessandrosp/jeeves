@@ -7,6 +7,7 @@ are going to be used by train.py and predict.py.
 import pandas as pd
 import sklearn.ensemble
 import sklearn.feature_extraction.text
+import sklearn.model_selection
 
 import _pickle as cPickle
 
@@ -125,7 +126,13 @@ class JeevesModel(object):
 
     def _generate_model(self):
         """Generate a brand new model."""
-        model = sklearn.ensemble.RandomForestClassifier(n_jobs=-1)
+        clf = sklearn.ensemble.RandomForestClassifier()
+        param_grid = {'max_features': ['auto', None]}
+        model = sklearn.model_selection.GridSearchCV(
+            estimator=clf,
+            param_grid=param_grid,
+            scoring='accuracy',
+            n_jobs=-1)
         return model
 
     def _load_model(self):
