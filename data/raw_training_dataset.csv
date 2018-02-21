@@ -11,12 +11,12 @@ long list me the files,ls -l
 show me files and folders using a long listing format,ls -l
 list me the files and their permissions,ls -l
 show me the files and their size,ls -l
-show me the disk space,df
-give me the disk space,df
-list the various disks and their space,df
-list me the disk spaces,df
-how much space there is on the disk,df
-print the amount of free space on disk,df
+show me the disk space,df -h
+give me the disk space,df -h 
+list the various disks and their space,df -h
+list me the disk spaces,df -h
+how much space there is on the disk,df -h
+print the amount of free space on disk,df -h
 show me the disk space in megabytes,df -m
 get me the disk spaces in mb,df -m
 list me the disk spaces in megabytes,df -m
